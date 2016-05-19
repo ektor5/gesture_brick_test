@@ -30,6 +30,7 @@
 # THE SOFTWARE.
 
 I2C_BUS=1
+QUIET=0
 PAJ7620_ADDR_BASE=0x00
 PAJ7620_REGISTER_BANK_SEL=$((PAJ7620_ADDR_BASE + 0xEF))
 PAJ7620_ID=0x73
@@ -295,7 +296,8 @@ log() {
     *) ;;
   esac
 
-  echo $MOD ${COLOR}$@${RST}
+  (( QUIET )) || echo $MOD ${COLOR}$@${RST}
+
 }
 
 error() {
@@ -310,12 +312,38 @@ error() {
   exit $E_CODE
 }
 
+usage() {
+  cat <<-USAGE
+		Usage: ./gesture_brick.sh [-q]
+		Options:
+
+		    -q     Quiet, suppress initialization output
+		    -h     Display usage
+		
+		USAGE
+}
+usagee(){
+  usage
+  exit ${1:-1}
+}
+
 _set(){
   i2cset -f -y $I2C_BUS $PAJ7620_ID $1 $2 || ( log err "Cannot set i2c register" && false )
 }
 _get(){
   i2cget -f -y $I2C_BUS $PAJ7620_ID $1 || ( log err "Cannot get i2c register" && false )
 }
+
+while getopts ":qh" option
+do
+  case $option in
+    q) _QUIET=1 ;;
+    h) usage; exit ;;
+    *) log err "Option not recognized" ; usagee; exit ;;
+  esac
+done
+
+(( _QUIET )) && QUIET=1
 
 # set to active mode
 log "Initializing..."

@@ -6,13 +6,12 @@ Based on [Gesture PAJ7620][git] Arduino library and 9 gesture example.
 [git]: https://github.com/ektor5/Gesture_PAJ7620
 
 ### Usage
-```
-# ./gesture_brick.sh [-q]
-Options:
+	Usage: ./gesture_brick.sh [-q] [-h]
+	Options:
 
- -q     Quiet, suppress initialization output
-```
-
+	    -q     Quiet, suppress initialization output
+	    -h     Display usage
+		
 ### Credits
 *Copyright (c) 2016 UDOO Team*  
 *Copyright (c) 2015 seeed technology inc.*  
